@@ -1,1 +1,1 @@
-# mini-victor-store
+The MERN Stack notice-Board Blog Project: Full Web Development

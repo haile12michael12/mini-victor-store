@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 const cors = require("cors");
-dotenv.config();
+require('dotenv').config();
 const http = require("http");
 const express = require("express");
 const usersRouter = require("./routes/users/usersRouter");
@@ -31,5 +31,5 @@ app.use(notFound);
 app.use(globalErrHandler);
 const server = http.createServer(app);
 //? Start the server
-const PORT = process.env.PORT || 9080;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, console.log(`Server is running on port ${PORT}`));
