@@ -24,7 +24,7 @@ export default function PublicNavbar() {
   const navigation = [
     { name: "Home", href: "/", current: isActive("/") },
     { name: "Posts", href: "/posts", current: isActive("/posts") },
-    { name: "Categories", href: "/categories", current: isActive("/categories") },
+
     { name: "About", href: "/about", current: isActive("/about") },
   ];
 
