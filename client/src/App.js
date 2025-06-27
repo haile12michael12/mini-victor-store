@@ -18,6 +18,7 @@ import PasswordResetRequest from "./components/Users/PasswordResetRequest";
 import PasswordReset from "./components/Users/PasswordReset";
 import UpdateUser from "./components/Users/UpdateUser";
 import SchedulePost from "./components/Posts/SchedulePost";
+import About from "./components/About/About";
 import Footer from "./components/Footer/Footer";
 import RegisterUser from "./components/Users/RegisterUser";
 

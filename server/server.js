@@ -13,11 +13,10 @@ const postsRouter = require("./routes/post/postRouter");
 const commentRouter = require("./routes/comment/commentRouter");
 const sendEmail = require("./utils/sendEmail");
 require("./config/database")();
-//sendEmail("inovodev@gmail.com", "Some message");
-//!Server
+
 const app = express();
 //middlewares
-app.use(express.json()); //Pass incoming data
+app.use(express.json()); 
 //cors middleware
 app.use(cors());
 // Routes

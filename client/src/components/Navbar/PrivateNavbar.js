@@ -1,213 +1,158 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/20/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { BellIcon, MoonIcon, SunIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { FaBlog } from "react-icons/fa";
 import { logoutAction } from "../../redux/slices/users/usersSlices";
 import { useDispatch, useSelector } from "react-redux";
+import clsx from "clsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function PrivateNavbar() {
-  const { profile, userAuth } = useSelector((state) => state?.users);
-  //!dispatch
+  const { userAuth } = useSelector((state) => state?.users);
   const dispatch = useDispatch();
+  const [darkMode, setDarkMode] = useState(false);
+
   const logoutHandler = () => {
     dispatch(logoutAction());
-    //reload
     window.location.reload();
   };
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+    // You can integrate Tailwind dark mode here if needed
+  };
+
   return (
-    <Disclosure as="nav" className="bg-white shadow">
+    <Disclosure as="nav" className="bg-slate-900/95 backdrop-blur-xl shadow-2xl border-b border-slate-700/50 z-50 sticky top-0">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between">
-              <div className="flex">
-                <div className="-ml-2 mr-2 flex items-center md:hidden">
-                  {/* Mobile menu button */}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Disclosure.Button>
-                </div>
-                <div className="flex flex-shrink-0 items-center">
-                  <Link to="/">
-                    <FaBlog className="block text-green-500 h-8 w-auto lg:hidden" />
+            <div className="flex h-20 justify-between items-center">
+              {/* Left section */}
+              <div className="flex items-center space-x-6">
+                <Disclosure.Button className="md:hidden p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-200">
+                  {open ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+                </Disclosure.Button>
 
-                    <FaBlog className="hidden text-green-500 h-8 w-auto lg:block" />
-                  </Link>
-                </div>
-                <div className="hidden md:ml-6 md:flex md:space-x-8">
-                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  <Link
-                    to={"/"}
-                    className="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    to={"/posts"}
-                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  >
-                    Posts
-                  </Link>
+                <Link to="/" className="flex items-center gap-3 group">
+                  <div className="relative">
+                    <FaBlog className="text-blue-400 h-8 w-8 group-hover:scale-105 transition-transform duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  <span className="text-xl font-bold text-white hidden sm:block">
+                    <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Victor</span>
+                    <span className="text-slate-200">Blog</span>
+                  </span>
+                </Link>
+
+                <div className="hidden md:flex space-x-8 ml-8">
+                  <Link to="/" className="text-slate-300 hover:text-white font-medium transition-colors duration-200 hover:bg-slate-800/50 px-3 py-2 rounded-lg">Home</Link>
+                  <Link to="/posts" className="text-slate-300 hover:text-white font-medium transition-colors duration-200 hover:bg-slate-800/50 px-3 py-2 rounded-lg">Posts</Link>
                 </div>
               </div>
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <Link
-                    to={"/add-post"}
-                    className="ml-2 relative inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+
+              {/* Right section */}
+              <div className="flex items-center space-x-6">
+                {/* Add Post */}
+                <Link
+                  to="/add-post"
+                  className="hidden sm:flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold rounded-xl shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                >
+                  <PlusIcon className="h-5 w-5" />
+                  Add Post
+                </Link>
+
+                {/* Notifications */}
+                <div className="relative group">
+                  <button className="relative p-3 rounded-xl bg-slate-800 hover:bg-slate-700 transition-all duration-200">
+                    <BellIcon className="h-6 w-6 text-slate-300 group-hover:text-white" />
+                    <span className="absolute top-2 right-2 block h-3 w-3 rounded-full bg-red-500 animate-pulse" />
+                    <span className="absolute top-2 right-2 block h-3 w-3 rounded-full bg-red-500" />
+                  </button>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800 px-2 py-1 rounded">Notifications</span>
+                </div>
+
+                {/* Dark Mode Toggle */}
+                <button
+                  onClick={toggleDarkMode}
+                  className="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 transition-all duration-200"
+                >
+                  {darkMode ? <SunIcon className="h-5 w-5 text-yellow-400" /> : <MoonIcon className="h-5 w-5 text-slate-300" />}
+                </button>
+
+                {/* User Menu */}
+                <Menu as="div" className="relative">
+                  <Menu.Button className="relative">
+                    <img
+                      className="h-10 w-10 rounded-xl ring-2 ring-blue-500 shadow-lg hover:ring-purple-500 transition-all duration-200"
+                      src={
+                        userAuth?.userInfo?.profilePicture ||
+                        "https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_1280.png"
+                      }
+                      alt="User avatar"
+                    />
+                    <span className="absolute bottom-0 right-0 block h-3 w-3 bg-green-500 rounded-full ring-2 ring-slate-900" />
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
                   >
-                    <PlusIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-                    Add New Post
-                  </Link>
-                </div>
-                <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
-                  {/* Profile dropdown */}
-                  <Menu as="div" className="relative ml-3">
-                    <div>
-                      <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src={
-                            userAuth?.userInfo?.profilePicture ||
-                            "https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_1280.png"
-                          }
-                          alt={userAuth?.userInfo?.username}
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-200"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              to={"/user-profile"}
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Your Profile
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              to="/update-profile"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Settings
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              onClick={logoutHandler}
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Sign out
-                            </button>
-                          )}
-                        </Menu.Item>
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                </div>
+                    <Menu.Items className="absolute right-0 mt-3 w-56 bg-slate-800 rounded-xl shadow-xl ring-1 ring-slate-700 py-2 z-20">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            to="/user-profile"
+                            className={classNames(active && "bg-slate-700", "block px-4 py-3 text-sm text-slate-300 hover:text-white transition-colors duration-200")}
+                          >
+                            Your Profile
+                          </Link>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            to="/update-profile"
+                            className={classNames(active && "bg-slate-700", "block px-4 py-3 text-sm text-slate-300 hover:text-white transition-colors duration-200")}
+                          >
+                            Settings
+                          </Link>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            onClick={logoutHandler}
+                            className={classNames(active && "bg-slate-700", "w-full text-left block px-4 py-3 text-sm text-slate-300 hover:text-red-400 transition-colors duration-200")}
+                          >
+                            Sign out
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
           </div>
 
-          <Disclosure.Panel className="md:hidden">
-            <div className="space-y-1 pt-2 pb-3">
-              {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
-              <Link
-                to={"/"}
-                className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700 sm:pl-5 sm:pr-6"
-              >
-                Home
-              </Link>
-              <Link
-                to={"/posts"}
-                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 sm:pl-5 sm:pr-6"
-              >
-                Posts
-              </Link>
-            </div>
-            <div className="border-t border-gray-200 pt-4 pb-3">
-              <div className="flex items-center px-4 sm:px-6">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={
-                      userAuth?.userInfo?.profilePicture ||
-                      "https://cdn.pixabay.com/photo/2016/11/18/23/38/child-1837375_1280.png"
-                    }
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">
-                    {userAuth?.userInfo?.username}
-                  </div>
-                  <div className="text-sm font-medium text-gray-500">
-                    {userAuth?.userInfo?.email}
-                  </div>
-                </div>
-                {/* <button
-                  type="button"
-                  className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button> */}
-              </div>
-              <div className="mt-3 space-y-1">
-                <Link
-                  to={"/user-profile"}
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 sm:px-6"
-                >
-                  Your Profile
-                </Link>
-                <Link
-                  to={"/update-profile"}
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 sm:px-6"
-                >
-                  Settings
-                </Link>
-                <button
-                  onClick={logoutHandler}
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 sm:px-6"
-                >
-                  Sign out
-                </button>
-              </div>
-            </div>
+          {/* Mobile Menu */}
+          <Disclosure.Panel className="md:hidden px-4 pt-4 pb-6 space-y-2 bg-slate-800/50 backdrop-blur-xl border-t border-slate-700">
+            <Link to="/" className="block text-slate-300 hover:text-white hover:bg-slate-700 px-4 py-3 rounded-xl transition-all duration-200">Home</Link>
+            <Link to="/posts" className="block text-slate-300 hover:text-white hover:bg-slate-700 px-4 py-3 rounded-xl transition-all duration-200">Posts</Link>
+            <Link to="/add-post" className="block text-blue-400 font-semibold hover:bg-slate-700 px-4 py-3 rounded-xl transition-all duration-200">Add New Post</Link>
+            <Link to="/user-profile" className="block text-slate-300 hover:text-white hover:bg-slate-700 px-4 py-3 rounded-xl transition-all duration-200">Your Profile</Link>
+            <Link to="/update-profile" className="block text-slate-300 hover:text-white hover:bg-slate-700 px-4 py-3 rounded-xl transition-all duration-200">Settings</Link>
+            <button onClick={logoutHandler} className="block text-slate-300 hover:text-red-400 hover:bg-slate-700 px-4 py-3 rounded-xl transition-all duration-200 w-full text-left">Sign out</button>
           </Disclosure.Panel>
         </>
       )}

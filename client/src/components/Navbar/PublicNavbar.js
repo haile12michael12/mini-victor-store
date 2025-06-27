@@ -34,15 +34,19 @@ export default function PublicNavbar() {
   ];
 
   return (
-    <Disclosure as="nav" className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-lg py-0" : "bg-white/90 backdrop-blur-sm py-1"}`}>
+    <Disclosure as="nav" className={`fixed w-full z-50 transition-all duration-500 ${
+      scrolled 
+        ? "bg-slate-900/95 backdrop-blur-xl shadow-2xl border-b border-slate-700/50" 
+        : "bg-slate-900/80 backdrop-blur-md"
+    }`}>
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 justify-between">
+            <div className="flex h-20 justify-between items-center">
               <div className="flex items-center">
                 {/* Mobile menu button */}
-                <div className="mr-2 flex items-center md:hidden">
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500">
+                <div className="mr-4 flex items-center md:hidden">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-lg p-2.5 text-slate-300 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -54,46 +58,53 @@ export default function PublicNavbar() {
 
                 {/* Logo */}
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to="/" className="flex items-center">
-                    <img 
-                      src={logo} 
-                      alt="Blogify Logo" 
-                      className="h-8 w-auto" 
-                    />
-                    <span className="ml-3 text-xl font-bold text-gray-900 hidden sm:block">
-                      <span className="text-teal-600">Victor</span>Door
+                  <Link to="/" className="flex items-center group">
+                    <div className="relative">
+                      <img 
+                        src={logo} 
+                        alt="VictorDoor Logo" 
+                        className="h-10 w-auto rounded-lg shadow-lg group-hover:scale-105 transition-transform duration-300" 
+                      />
+                      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <span className="ml-4 text-2xl font-bold text-white hidden sm:block">
+                      <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Victor</span>
+                      <span className="text-slate-200">Door</span>
                     </span>
                   </Link>
                 </div>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:ml-8 md:flex md:items-center md:space-x-6">
+                <div className="hidden md:ml-12 md:flex md:items-center md:space-x-8">
                   {navigation.map((item) => (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`px-1 pt-1 text-sm font-medium transition-colors duration-200 ${
+                      className={`relative px-3 py-2 text-sm font-medium transition-all duration-300 rounded-lg ${
                         item.current
-                          ? "text-teal-600 border-b-2 border-teal-600"
-                          : "text-gray-600 hover:text-teal-500"
+                          ? "text-white bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30"
+                          : "text-slate-300 hover:text-white hover:bg-slate-800/50"
                       }`}
                     >
                       {item.name}
+                      {item.current && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                      )}
                     </Link>
                   ))}
                 </div>
               </div>
 
               {/* Search and Actions */}
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-6">
                 {/* Search Bar */}
-                <div className="hidden md:block relative rounded-md shadow-sm">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                <div className="hidden lg:block relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                    <MagnifyingGlassIcon className="h-4 w-4 text-slate-400" aria-hidden="true" />
                   </div>
                   <input
                     type="text"
-                    className="block w-full rounded-md border-0 py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6"
+                    className="block w-80 rounded-xl border-0 py-3 pl-12 pr-4 text-white bg-slate-800/50 ring-1 ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:bg-slate-800 transition-all duration-300 sm:text-sm"
                     placeholder="Search posts..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -101,22 +112,22 @@ export default function PublicNavbar() {
                 </div>
 
                 {/* Notification and Profile */}
-                <div className="hidden md:flex items-center space-x-3">
+                <div className="hidden md:flex items-center space-x-4">
                   <button
                     type="button"
-                    className="rounded-full p-1 text-gray-600 hover:text-teal-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                    className="relative rounded-xl p-3 text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200"
                   >
                     <span className="sr-only">View notifications</span>
                     <RiNotification3Line className="h-6 w-6" aria-hidden="true" />
-                    <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500"></span>
+                    <span className="absolute top-2 right-2 h-3 w-3 rounded-full bg-red-500 animate-pulse"></span>
                   </button>
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                      <Menu.Button className="flex rounded-xl bg-slate-800 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 hover:bg-slate-700 transition-all duration-200">
                         <span className="sr-only">Open user menu</span>
-                        <div className="h-8 w-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600">
+                        <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white shadow-lg">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                           </svg>
@@ -132,16 +143,16 @@ export default function PublicNavbar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="absolute right-0 z-10 mt-3 w-56 origin-top-right rounded-xl bg-slate-800 py-2 shadow-xl ring-1 ring-slate-700 focus:outline-none">
                         {authLinks.map((link) => (
                           <Menu.Item key={link.name}>
                             {({ active }) => (
                               <Link
                                 to={link.href}
-                                className={`block px-4 py-2 text-sm ${
-                                  active ? "bg-gray-100" : ""
+                                className={`block px-4 py-3 text-sm transition-colors duration-200 ${
+                                  active ? "bg-slate-700 text-white" : "text-slate-300"
                                 } ${
-                                  link.current ? "text-teal-600" : "text-gray-700"
+                                  link.current ? "text-blue-400 font-medium" : ""
                                 }`}
                               >
                                 {link.name}
@@ -158,9 +169,9 @@ export default function PublicNavbar() {
                 <div className="flex-shrink-0">
                   <Link
                     to="/add-post"
-                    className="relative inline-flex items-center gap-x-1.5 rounded-md bg-gradient-to-r from-teal-500 to-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:from-teal-600 hover:to-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors duration-200"
+                    className="relative inline-flex items-center gap-x-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:from-blue-600 hover:to-purple-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   >
-                    <PlusIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
                     <span className="hidden sm:inline">New Post</span>
                   </Link>
                 </div>
@@ -170,15 +181,15 @@ export default function PublicNavbar() {
 
           {/* Mobile menu */}
           <Disclosure.Panel className="md:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
+            <div className="space-y-2 px-4 pb-6 pt-4 bg-slate-800/50 backdrop-blur-xl">
               {/* Search Bar Mobile */}
-              <div className="relative rounded-md shadow-sm mb-4">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+              <div className="relative rounded-xl shadow-sm mb-6">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                  <MagnifyingGlassIcon className="h-4 w-4 text-slate-400" aria-hidden="true" />
                 </div>
                 <input
                   type="text"
-                  className="block w-full rounded-md border-0 py-2 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal-500 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-xl border-0 py-3 pl-12 pr-4 text-white bg-slate-800 ring-1 ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 sm:text-sm"
                   placeholder="Search posts..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -190,26 +201,26 @@ export default function PublicNavbar() {
                   key={item.name}
                   as={Link}
                   to={item.href}
-                  className={`block rounded-md px-3 py-2 text-base font-medium ${
+                  className={`block rounded-xl px-4 py-3 text-base font-medium transition-all duration-200 ${
                     item.current
-                      ? "bg-teal-50 text-teal-700"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-teal-600"
+                      ? "bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border border-blue-500/30"
+                      : "text-slate-300 hover:bg-slate-700 hover:text-white"
                   }`}
                 >
                   {item.name}
                 </Disclosure.Button>
               ))}
 
-              <div className="border-t border-gray-200 pt-4">
+              <div className="border-t border-slate-700 pt-4 mt-4">
                 {authLinks.map((link) => (
                   <Disclosure.Button
                     key={link.name}
                     as={Link}
                     to={link.href}
-                    className={`block rounded-md px-3 py-2 text-base font-medium ${
+                    className={`block rounded-xl px-4 py-3 text-base font-medium transition-all duration-200 ${
                       link.current
-                        ? "bg-teal-50 text-teal-700"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-teal-600"
+                        ? "bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border border-blue-500/30"
+                        : "text-slate-300 hover:bg-slate-700 hover:text-white"
                     }`}
                   >
                     {link.name}
