@@ -1,4 +1,5 @@
 import React from "react";
+// import images
 import doorInstall from "../../assets/doorinstall.JPG";
 import hrmvictor from "../../assets/hrm-victor.JPG";
 import victordoor from "../../assets/victordoor.JPG";
