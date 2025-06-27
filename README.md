@@ -50,9 +50,9 @@ cd mini-victor-store
 - cd server
 - npm install
 # Create a .env file and add:
-# MONGO_URI=
-# JWT_SECRET=
-# PORT=5000
+ MONGO_URI=
+ JWT_SECRET=
+ PORT=5000
 - npm run dev
 
 3. Frontend Setup
